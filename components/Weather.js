@@ -6,11 +6,14 @@ import {
   TextInput,
   Button,
   Platform,
+  ImageBackground,
 } from "react-native";
 import axios from "axios";
 import WeatherData from "./WeatherData";
 import Icon from "react-native-vector-icons/Ionicons";
 import Modal from "react-native-modal";
+
+import backgroundImage from "../assets/bg.jpg";
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
@@ -54,33 +57,31 @@ const Weather = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.row}>
+    <ImageBackground source={backgroundImage} style={styles.container}>
+      <View style={styles.titleRow}>
         <Icon name="partly-sunny-outline" size={30} />
         <Text style={styles.titleText}>Weather</Text>
       </View>
       <View style={styles.searchContainer}>
-        <View style={{ flex: 1, flexBasis: 130 }}>
-          <TextInput
-            style={styles.input}
-            placeholder="Search..."
-            value={location}
-            onChangeText={setLocation}
-          />
-        </View>
-        <View style={{ flex: 1, marginRight: 5 }}>
+        <TextInput
+          style={styles.input}
+          placeholder="Search..."
+          value={location}
+          onChangeText={setLocation}
+        />
+        <View style={styles.buttonContainer}>
           <Button
             onPress={fetchWeatherData}
             title="Search"
             color="#77DD77"
             width="30"
           />
-        </View>
-        <View style={{ flex: 1 }}>
           <Button onPress={clear} title="Clear" color="#841584" />
         </View>
       </View>
-      {weatherData ? <WeatherData weatherData={weatherData} /> : null}
+      <View style={styles.content}>
+        {weatherData ? <WeatherData weatherData={weatherData} /> : null}
+      </View>
 
       <Modal isVisible={isAlertVisible} onBackdropPress={hideAlert}>
         <View style={styles.modalContainer}>
@@ -89,7 +90,7 @@ const Weather = () => {
           <Button title="OK" onPress={hideAlert} />
         </View>
       </Modal>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -97,11 +98,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "flex-start", // Align content at the top
     marginTop: Platform.OS == "android" ? 30 : 0,
+  },
+  content: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start", // Align content at the top
   },
   searchContainer: {
     flexDirection: "row",
-    margin: 10,
+    margin: 5,
+    marginTop: Platform.OS == "android" ? 30 : 0,
   },
   input: {
     borderWidth: 1,
@@ -133,6 +141,17 @@ const styles = StyleSheet.create({
     marginRight: 9,
     alignItems: "flex-start",
     flexDirection: "row",
+  },
+  titleRow: {
+    marginTop: 15,
+    marginLeft: 9,
+    marginRight: 9,
+    alignItems: "flex-start",
+    flexDirection: "row",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    marginLeft: 5,
   },
   modalContainer: {
     backgroundColor: "white",
